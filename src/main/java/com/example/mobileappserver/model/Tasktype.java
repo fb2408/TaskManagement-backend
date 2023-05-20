@@ -1,9 +1,13 @@
 package com.example.mobileappserver.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tasktype")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Tasktype {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
