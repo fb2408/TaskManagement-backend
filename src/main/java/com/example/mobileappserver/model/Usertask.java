@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usertask")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Usertask {
     @Id
@@ -32,6 +31,14 @@ public class Usertask {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
+
+    public Usertask(Boolean finished, Boolean reqRedirect, User user, OrganizationUnit organizationUnit, Task task) {
+        this.finished = finished;
+        this.reqRedirect = reqRedirect;
+        this.user = user;
+        this.organizationUnit = organizationUnit;
+        this.task = task;
+    }
 
     public Integer getId() {
         return id;

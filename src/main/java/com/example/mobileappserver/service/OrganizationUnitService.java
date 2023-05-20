@@ -22,7 +22,7 @@ public class OrganizationUnitService {
     }
 
     public void updateOrganizationUnit(OrganizationUnit organizationunit) throws Exception {
-        OrganizationUnit changedOrgUnit = organizationUnitRepository.findById(organizationunit.getId()).orElseThrow(() -> new Exception("Org unit not founded!"));
+        OrganizationUnit changedOrgUnit = organizationUnitRepository.findById(organizationunit.getId()).orElseThrow(() -> new Exception("Org unit not found!"));
         changedOrgUnit.setName(organizationunit.getName());
         changedOrgUnit.setCloseTime(organizationunit.getCloseTime());
         changedOrgUnit.setOpenTime(organizationunit.getOpenTime());

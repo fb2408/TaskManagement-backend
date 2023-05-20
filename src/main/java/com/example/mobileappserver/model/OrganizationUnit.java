@@ -9,7 +9,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "organizationunit")
 @NoArgsConstructor
-@AllArgsConstructor
 public class OrganizationUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +27,13 @@ public class OrganizationUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "superorganizationunit")
     private OrganizationUnit superorganizationunit;
+
+    public OrganizationUnit(String name, LocalTime openTime, LocalTime closeTime, OrganizationUnit superorganizationunit) {
+        this.name = name;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.superorganizationunit = superorganizationunit;
+    }
 
     public Integer getId() {
         return id;

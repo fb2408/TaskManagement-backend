@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public void updateWorker(User user) throws Exception {
-        User changeUser = userRepository.findById(user.getId()).orElseThrow(() -> new Exception("User doesnit exsist"));
+        User changeUser = userRepository.findById(user.getId()).orElseThrow(() -> new Exception("User doesn't exist"));
         changeUser.setName(user.getName());
         changeUser.setAbility(user.getAbility());
         changeUser.setGender(user.getGender());

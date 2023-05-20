@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tasktype")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Tasktype {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_type_id", nullable = false)
     private Integer id;
+
+    public Tasktype(String taskTypeName) {
+        this.taskTypeName = taskTypeName;
+    }
 
     @Column(name = "task_type_name", length = Integer.MAX_VALUE)
     private String taskTypeName;

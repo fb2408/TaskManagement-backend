@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@AllArgsConstructor
 @NoArgsConstructor
 public class User {
     @Id
@@ -43,6 +42,19 @@ public class User {
 
     @Column(name = "is_admin")
     private Boolean isAdmin;
+
+    public User(String name, String password, String email, Boolean registered, String deviceToken, String gender, Boolean active, Integer ability, Integer workingYears, Boolean isAdmin) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.registered = registered;
+        this.deviceToken = deviceToken;
+        this.gender = gender;
+        this.active = active;
+        this.ability = ability;
+        this.workingYears = workingYears;
+        this.isAdmin = isAdmin;
+    }
 
     public Boolean getRegistered() {
         return registered;
