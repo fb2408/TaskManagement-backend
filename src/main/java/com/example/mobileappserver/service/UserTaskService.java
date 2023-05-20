@@ -40,7 +40,7 @@ public class UserTaskService {
         Usertask task = userTaskRepository.findById(id).orElseThrow(()  -> new Exception("Task doesnt exsist"));
         if(task.getReqRedirect()) {
             System.out.println("Task already required for redirecting.");
-            new Exception("Task already required for redirecting.");
+            throw new Exception("Task already required for redirecting.");
         } else {
             task.setReqRedirect(true);
             userTaskRepository.save(task);
