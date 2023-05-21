@@ -126,7 +126,7 @@ class UserServiceTest {
                 true, "123456", "M", false, 5, 3, false);
 
         when(userRepository.findById(Integer.parseInt(id))).thenReturn(Optional.of(testUser));
-        User actualUser = underTest.find(id);
+        final User actualUser = underTest.find(id);
         Assert.assertEquals(testUser, actualUser);
     }
 
