@@ -66,19 +66,23 @@ class WorkerControllerIntTest {
 
     @AfterEach
     void tearDown() {
-        userTaskRepository.delete(testUserTask1);
-        userTaskRepository.delete(testUserTask2);
-        taskRepository.delete(testTask1);
-        taskRepository.delete(testTask2);
-        organizationUnitRepository.delete(testOrganizationUnit);
-        taskTypeRepository.delete(testTaskType);
-        userRepository.delete(testUser);
+        userTaskRepository.deleteById(testUserTask1.getId());
+        userTaskRepository.deleteById(testUserTask2.getId());
+        taskRepository.deleteById(testTask1.getId());
+        taskRepository.deleteById(testTask2.getId());
+        organizationUnitRepository.deleteById(testOrganizationUnit.getId());
+        taskTypeRepository.deleteById(testTaskType.getId());
+        userRepository.deleteById(testUser.getId());
     }
 
     @Test
-    @Disabled
     void requestForRedirectTask() {
+        this.restTemplate
+                .getForObject("http://localhost:" + port + "/worker/redirectRequest?task_id="
+                        + testUserTask1.getId(), void.class);
 
+        Usertask usertask = userTaskRepository.findById(testUserTask1.getId()).get();
+        Assert.assertEquals(true, usertask.getReqRedirect());
     }
 
     @Test
@@ -93,12 +97,6 @@ class WorkerControllerIntTest {
         Usertask response = this.restTemplate
                 .getForObject("http://localhost:" + port + "/worker/finishingTask?id=" + testUserTask1.getId(), Usertask.class);
         assertEquals(true, response.getFinished());
-
-        Optional<Usertask> changed = userTaskRepository.findById(testUserTask1.getId());
-        if (changed.isPresent()) {
-            changed.get().setFinished(false);
-            userTaskRepository.save(changed.get());
-        }
     }
 
     @Test
@@ -115,11 +113,6 @@ class WorkerControllerIntTest {
         this.restTemplate
                 .getForEntity("http://localhost:" + port + "/worker/change-device-token?id="
                         + testUser.getId() + "&deviceToken=" + deviceToken, void.class);
-        Assert.assertEquals(userRepository.findById(testUser.getId()).get().getDeviceToken(), deviceToken);
-
-        User user = userRepository.findById(testUser.getId()).get();
-        user.setDeviceToken("1234");
-        userRepository.save(user);
-
+        Assert.assertEquals(deviceToken, userRepository.findById(testUser.getId()).get().getDeviceToken());
     }
 }
