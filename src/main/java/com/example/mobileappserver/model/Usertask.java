@@ -1,6 +1,7 @@
 package com.example.mobileappserver.model;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor

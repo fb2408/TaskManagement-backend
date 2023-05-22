@@ -24,6 +24,12 @@ public class Task {
     @JoinColumn(name = "task_type_id")
     private Tasktype taskType;
 
+    public Task(String name, Integer level, Tasktype taskType) {
+        this.name = name;
+        this.level = level;
+        this.taskType = taskType;
+    }
+
     public Integer getId() {
         return id;
     }

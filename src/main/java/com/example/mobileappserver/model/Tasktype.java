@@ -12,9 +12,6 @@ public class Tasktype {
     @Column(name = "task_type_id", nullable = false)
     private Integer id;
 
-    public Tasktype(String taskTypeName) {
-        this.taskTypeName = taskTypeName;
-    }
 
     @Column(name = "task_type_name", length = Integer.MAX_VALUE)
     private String taskTypeName;
