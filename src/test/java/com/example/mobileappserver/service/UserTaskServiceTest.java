@@ -1,6 +1,7 @@
 package com.example.mobileappserver.service;
 
 import com.example.mobileappserver.model.*;
+import com.example.mobileappserver.repository.OrganizationUnitRepository;
 import com.example.mobileappserver.repository.UserTaskRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +21,13 @@ class UserTaskServiceTest {
 
     @Mock
     private UserTaskRepository userTaskRepository;
+
     private UserTaskService underTest;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new UserTaskService(userTaskRepository);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        underTest = new UserTaskService(userTaskRepository);
+//    }
 
 
     @Test

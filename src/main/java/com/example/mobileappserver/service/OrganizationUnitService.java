@@ -1,8 +1,10 @@
 package com.example.mobileappserver.service;
 
 import com.example.mobileappserver.model.OrganizationUnit;
+import com.example.mobileappserver.model.Task;
 import com.example.mobileappserver.repository.OrganizationUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,15 @@ public class OrganizationUnitService {
         this.organizationUnitRepository = organizationUnitRepository;
     }
 
-    public void addOrganizationUnit(OrganizationUnit organizationunit) {
-        organizationUnitRepository.save(organizationunit);
+    public void addOrganizationUnit(OrganizationUnit organizationunit) throws Exception {
+        OrganizationUnit o = organizationUnitRepository.findByName(organizationunit.getName());
+
+        if(o != null) {
+            throw new Exception("Organization unit with that name already exsist!");
+
+        } else {
+            organizationUnitRepository.save(organizationunit);
+        }
     }
 
     public void updateOrganizationUnit(OrganizationUnit organizationunit) throws Exception {
@@ -36,5 +45,13 @@ public class OrganizationUnitService {
 
     public List<OrganizationUnit> listAll() {
         return organizationUnitRepository.findAll();
+    }
+
+    public void save(OrganizationUnit ou) {
+        organizationUnitRepository.save(ou);
+    }
+
+    public OrganizationUnit findByName(String orgUnitName) {
+        return organizationUnitRepository.findByName(orgUnitName);
     }
 }

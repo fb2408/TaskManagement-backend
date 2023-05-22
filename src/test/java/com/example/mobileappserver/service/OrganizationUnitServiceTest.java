@@ -25,7 +25,7 @@ class OrganizationUnitServiceTest {
     }
 
     @Test
-    void addOrganizationUnit() {
+    void addOrganizationUnit() throws Exception {
         final OrganizationUnit testOrganizationUnit = new OrganizationUnit("Aria bar",
                 LocalTime.of(9,0), LocalTime.of(0,0),
                 null);

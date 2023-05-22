@@ -76,6 +76,7 @@ class WorkerControllerIntTest {
     }
 
     @Test
+
     void requestForRedirectTask() {
         this.restTemplate
                 .getForObject("http://localhost:" + port + "/worker/redirectRequest?task_id="
@@ -114,5 +115,6 @@ class WorkerControllerIntTest {
                 .getForEntity("http://localhost:" + port + "/worker/change-device-token?id="
                         + testUser.getId() + "&deviceToken=" + deviceToken, void.class);
         Assert.assertEquals(deviceToken, userRepository.findById(testUser.getId()).get().getDeviceToken());
+
     }
 }

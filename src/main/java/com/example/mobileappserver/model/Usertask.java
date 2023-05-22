@@ -1,12 +1,10 @@
 package com.example.mobileappserver.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "usertask")
 @NoArgsConstructor
+@Table(name = "usertask")
 public class Usertask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.example.mobileappserver.model;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -22,12 +23,6 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_type_id")
     private Tasktype taskType;
-
-    public Task(String name, Integer level, Tasktype taskType) {
-        this.name = name;
-        this.level = level;
-        this.taskType = taskType;
-    }
 
     public Integer getId() {
         return id;

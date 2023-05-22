@@ -1,21 +1,29 @@
 package com.example.mobileappserver.service;
 
+
+import com.example.mobileappserver.model.OrganizationUnit;
 import com.example.mobileappserver.model.Usertask;
+import com.example.mobileappserver.repository.OrganizationUnitRepository;
+import com.example.mobileappserver.repository.TaskRepository;
 import com.example.mobileappserver.repository.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserTaskService {
 
     @Autowired
     private final UserTaskRepository userTaskRepository;
+    private final TaskRepository taskRepository;
 
-    public UserTaskService(UserTaskRepository userTaskRepository) {
+
+    public UserTaskService(UserTaskRepository userTaskRepository,
+                           TaskRepository taskRepository) {
         this.userTaskRepository = userTaskRepository;
+        this.taskRepository = taskRepository;
     }
 
     public Usertask taskFinished(Integer id) throws Exception {
@@ -64,4 +72,21 @@ public class UserTaskService {
         return userTaskRepository.findById(userTaskId).orElseThrow(() ->  new Exception("User task not found"));
 
     }
+
+    public List<Usertask> findByUser(Integer id) {
+        return userTaskRepository.findAllByUserId(id);
+    }
+
+    public void update(Usertask userTask) {
+        taskRepository.save(userTask.getTask());
+        System.out.println(userTask.getId());
+        Usertask userTaskChange = userTaskRepository.findById(userTask.getId()).orElseThrow(()-> new ExpressionException("..."));
+        userTaskChange.setFinished(userTask.getFinished());
+        userTaskRepository.save(userTaskChange);
+    }
+
+    public List<Usertask> findByOrganizationUnit(int parseInt) {
+        return userTaskRepository.findByOrganizationUnitId(parseInt);
+    }
+
 }

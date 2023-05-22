@@ -1,23 +1,24 @@
-package com.example.mobileappserver.service;
 
-import com.example.mobileappserver.model.Task;
-import com.example.mobileappserver.model.Tasktype;
-import com.example.mobileappserver.model.User;
-import com.example.mobileappserver.model.Usertask;
-import com.example.mobileappserver.repository.TaskRepository;
-import com.example.mobileappserver.repository.UserTaskRepository;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+        package com.example.mobileappserver.service;
 
-import java.util.Optional;
+        import com.example.mobileappserver.model.Task;
+        import com.example.mobileappserver.model.Tasktype;
+        import com.example.mobileappserver.model.User;
+        import com.example.mobileappserver.model.Usertask;
+        import com.example.mobileappserver.repository.TaskRepository;
+        import com.example.mobileappserver.repository.UserTaskRepository;
+        import org.junit.Assert;
+        import org.junit.jupiter.api.BeforeEach;
+        import org.junit.jupiter.api.Test;
+        import org.junit.jupiter.api.extension.ExtendWith;
+        import org.mockito.Mock;
+        import org.mockito.Mockito;
+        import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+        import java.util.Optional;
+
+        import static org.junit.jupiter.api.Assertions.*;
+        import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
@@ -40,7 +41,7 @@ class TaskServiceTest {
         Exception exception = assertThrows(Exception.class, () -> {
             underTest.taskFinished(taskId);
         });
-        assertEquals("Task doesn't exsist", exception.getMessage());
+        assertEquals("Task doesn't exist", exception.getMessage());
     }
 
     @Test
@@ -118,7 +119,7 @@ class TaskServiceTest {
         Exception exception = assertThrows(Exception.class, () -> {
             underTest.updateTask(testTask);
         });
-        assertEquals("Task doesnt exsist!", exception.getMessage());
+        assertEquals("Task doesn't exist!", exception.getMessage());
     }
 
     @Test

@@ -32,7 +32,7 @@ class LoginControllerIntTest {
                 this.restTemplate
                         .getForObject("http://localhost:" + port + "/login?email=" + testEmail, User.class)
                         .getEmail(),
-                        testEmail);
+                testEmail);
 
         userRepository.delete(testUser);
     }

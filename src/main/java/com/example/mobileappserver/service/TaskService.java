@@ -21,7 +21,7 @@ public class TaskService {
     }
 
     public void taskFinished(Integer taskId) throws Exception {
-            Usertask task = userTaskRepository.findById(taskId).orElseThrow(()  -> new Exception("Task doesnt exsist"));
+            Usertask task = userTaskRepository.findById(taskId).orElseThrow(()  -> new Exception("Task doesn't exist"));
             if(task.getFinished()) {
                 throw new Exception("Task already solved!!!");
             } else {
@@ -47,7 +47,7 @@ public class TaskService {
     }
 
     public void updateTask(Task task) throws Exception {
-        Task changeTask = taskRepository.findById(task.getId()).orElseThrow(() -> new Exception("Task doesnt exsist!"));
+        Task changeTask = taskRepository.findById(task.getId()).orElseThrow(() -> new Exception("Task doesn't exist!"));
         changeTask.setName(task.getName());
         changeTask.setLevel(task.getLevel());
         changeTask.setTaskType(task.getTaskType());
@@ -60,5 +60,9 @@ public class TaskService {
 
     public List<Task> listAll() {
         return taskRepository.findAll();
+    }
+
+    public void save(Task task) {
+        taskRepository.save(task);
     }
 }

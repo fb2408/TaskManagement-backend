@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -30,6 +29,7 @@ public class UserService {
     public void updateWorker(User user) throws Exception {
         User changeUser = userRepository.findById(user.getId()).orElseThrow(() -> new Exception("User doesn't exist"));
         changeUser.setName(user.getName());
+        changeUser.setEmail(user.getEmail());
         changeUser.setAbility(user.getAbility());
         changeUser.setGender(user.getGender());
         changeUser.setActive(user.getActive());
@@ -58,4 +58,11 @@ public class UserService {
         return userRepository.findByIsAdmin(false);
     }
 
+    public User findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    public void save(User u) {
+        userRepository.save(u);
+    }
 }

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "organizationunit")
 @NoArgsConstructor
+@Table(name = "organizationunit")
 public class OrganizationUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

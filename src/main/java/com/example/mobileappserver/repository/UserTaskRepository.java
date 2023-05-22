@@ -14,7 +14,10 @@ public interface UserTaskRepository extends JpaRepository<Usertask, Integer> {
 
     List<Usertask> findAllByUserId(Integer id);
 
+    List<Usertask> findByOrganizationUnitId(int parseInt);
+
     @Modifying
     @Query(value= "delete from UserTask e  where e.user_id =:userId and e.task_id =:taskId",nativeQuery=true)
     void deleteByUserIdAndTaskId(@Param("userId") int userId, @Param("taskId") int taskId);
+
 }

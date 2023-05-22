@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,6 +65,14 @@ public class AdminController {
         taskService.deleteTask(Integer.parseInt(taskId));
     }
 
+    @RequestMapping(value = "/get-user", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody User getUser(@RequestParam("name") String name) {
+        System.out.println("Find user by name " + name);
+        User u = userService.findByName(name);
+        System.out.println(u.getName());
+        return u;
+    }
+
     @RequestMapping(value = "/addUser", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void addWorker(@RequestBody User user) {
         userService.addWorker(user);
@@ -72,44 +81,87 @@ public class AdminController {
         System.out.println(user.getWorkingYears());
     }
 
-    @RequestMapping(value = "/updateUser", method = RequestMethod.GET)
-    public void updateWorker(@RequestBody User user) throws Exception {
+    @RequestMapping(value = "/update-user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateWorker(@RequestBody User user, @RequestParam("name") String orgUnitName) throws Exception {
+        List<Usertask> usertask = userTaskService.findByUser(user.getId());
+        OrganizationUnit changeOrgUnit = organizationUnitService.findByName(orgUnitName);
+        for (Usertask usertask1 : usertask) {
+            System.out.println(changeOrgUnit.getName());
+            usertask1.setOrganizationUnit(changeOrgUnit);
+            userTaskService.update(usertask1);
+        }
         userService.updateWorker(user);
 
     }
 
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
-    public void deleteWorker(@RequestParam("id") String workerid) {
-        userService.deleteWorker(Integer.parseInt(workerid));
+    @RequestMapping(value = "/delete-user", method = RequestMethod.GET)
+    public void deleteWorker(@RequestParam("id") String userId) {
+        List<Usertask> usertaskList = userTaskService.findByUser(Integer.parseInt(userId));
+        usertaskList.forEach(ut ->  userTaskService.deleteUserTask(ut.getId()));
+        userService.deleteWorker(Integer.parseInt(userId));
     }
 
-    @RequestMapping(value = "/addOrganizationUnit", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void addOrganizationUnit(@RequestBody OrganizationUnit organizationunit) {
-        organizationUnitService.addOrganizationUnit(organizationunit);
-        System.out.println(organizationunit.getId());
-        System.out.println(organizationunit.getName());
-        System.out.println(organizationunit.getCloseTime());
+    @RequestMapping(value = "/add-organization-unit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OrganizationUnit> addOrganizationUnit(@RequestBody OrganizationUnit organizationunit) {
+        System.out.println("Try to add unit with name " + organizationunit.getName());
+        try {
+            organizationUnitService.addOrganizationUnit(organizationunit);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/updateOrganizationUnit", method = RequestMethod.GET)
+    @RequestMapping(value = "/update-organization-unit", method = RequestMethod.POST)
     public void updateOrganizationUnit(@RequestBody OrganizationUnit organizationunit) throws Exception {
+        System.out.println("Try to update organization unit with id" + organizationunit.getId());
+        System.out.println(organizationunit.getName());
+        System.out.println(organizationunit.getOpenTime());
         organizationUnitService.updateOrganizationUnit(organizationunit);
 
     }
 
-    @RequestMapping(value = "/deleteOrganizationUnit", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete-organization-unit", method = RequestMethod.GET)
     public void deleteOrganizationUnit(@RequestParam("id") String orgUnitId) {
+        System.out.println("Try to delete org unit with id " + orgUnitId);
+        List<Usertask> usertaskList = userTaskService.findByOrganizationUnit(Integer.parseInt(orgUnitId));
+        usertaskList.forEach(ut ->  userTaskService.deleteUserTask(ut.getId()));
         organizationUnitService.deleteOrganizationUnit(Integer.parseInt(orgUnitId));
+
     }
 
-    @RequestMapping(value = "/addUserTask", method = RequestMethod.POST)
-    public void addUserTask(@RequestBody Usertask userTask) {
-//        userTaskService.addUserTask(userTask);
-//        String id = String.valueOf(userTask.getUser().getId());
-        String id = "1";
-//        String taskId = String.valueOf(userTask.getTask().getId());
-        String taskId = "1";
-        System.out.println("Yeah");
+    @RequestMapping(value = "get-org-unit-by-username", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody OrganizationUnit getOrgUnitByUserName(@RequestParam("id") String id) {
+        return userTaskService.findByUser(Integer.parseInt(id)).get(0).getOrganizationUnit();
+    }
+
+    @RequestMapping(value = "/addUserTask", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Usertask> addUserTask(@RequestBody Usertask userTask) {
+        User u = userService.findByName(userTask.getUser().getName());
+        OrganizationUnit ou = userTaskService.findByUser(u.getId()).get(0).getOrganizationUnit();
+
+        Usertask userTaskChange = new Usertask();
+        userTaskChange.setTask(userTask.getTask());
+        userTaskChange.setUser(u);
+        userTaskChange.setOrganizationUnit(ou);
+        userTaskChange.setFinished(userTask.getFinished());
+        userTaskChange.setReqRedirect(false);
+
+        try {
+            taskService.addTask(userTask.getTask());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        userTaskService.addUserTask(userTaskChange);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/update-user-task", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateUserTask(@RequestBody Usertask userTask) {
+        System.out.println(userTask.getFinished());
+        userTaskService.update(userTask);
+
     }
 
     @RequestMapping(value = "/delete-user-task", method = RequestMethod.GET)
@@ -145,11 +197,6 @@ public class AdminController {
         return tasktypeList;
     }
 
-//    @RequestMapping(value = "/list-unfinished-tasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public @ResponseBody List<Task> listUnDistributedTasks() {
-//
-//    }
-
 
     @RequestMapping(value="/overview-user-tasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Usertask> overviewOnUserTasks() {
@@ -157,20 +204,14 @@ public class AdminController {
         return userTaskList;
     }
 
+    @RequestMapping(value="/list-units", method = RequestMethod.GET)
+    public @ResponseBody List<OrganizationUnit> listUnits() {
+        List<OrganizationUnit> organizationUnitList = organizationUnitService.listAll();
+        return organizationUnitList;
+    }
 
 
-//    @GetMapping(value = "/task-distribution", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public @ResponseBody DistributionDto taskDistribution() {
-//        List<User> workers = userService.findAllWorkers();
-//        workers.forEach(w -> System.out.println(w.getName()));
-//        List<Task> taskList = taskService.listAll();
-//        List<OrganizationUnit> organizationUnitList = organizationUnitService.listAll();
-//        DistributionDto distributionDto = new DistributionDto();
-//        distributionDto.setTaskList(taskList);
-//        distributionDto.setWorkerList(workers);
-//        distributionDto.setOrganizationUnitList(organizationUnitList);
-//        return distributionDto;
-//    }
+
 
 
 
